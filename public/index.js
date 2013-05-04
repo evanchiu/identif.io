@@ -17,6 +17,7 @@ socket.on('result', function (msg) {
 //
 $(function () {
     $('#send-letters').submit(function () {
+        $('#results').empty();
         socket.emit('letters', $('#letters').val());
         clear();
         return false;
