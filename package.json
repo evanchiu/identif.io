@@ -4,12 +4,13 @@
   "version": "0.1.0",
   "author": "Evan Chiu <evan@evanchiu.com",
   "dependencies": {
-    "socket.io": "*",
+    "levelup": "*",
     "node-static": "*",
+    "socket.io": "*",
     "socket.io-client": "*"
   },
   "scripts": {
     "start": "node app.js",
-    "predeploy": "echo todo"
+    "predeploy": "node predeploy.js"
   }
 }
