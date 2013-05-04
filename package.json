@@ -1,0 +1,15 @@
+{
+  "name": "identif.io",
+  "description": "An application to identify things",
+  "version": "0.1.0",
+  "author": "Evan Chiu <evan@evanchiu.com",
+  "dependencies": {
+    "socket.io": "*",
+    "node-static": "*",
+    "socket.io-client": "*"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "predeploy": "echo todo"
+  }
+}
