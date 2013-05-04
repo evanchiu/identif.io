@@ -9,7 +9,7 @@ socket.on('connect', function () {
 });
 
 socket.on('result', function (msg) {
-    $('#results').append($('<p>').append($('<em>').text(msg)));
+    $('#results').append($('<li>').text(msg));
 });
 
 //
