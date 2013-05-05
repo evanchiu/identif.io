@@ -6,7 +6,8 @@ var fs = require('fs'),
     path = require('path'),
     sio = require('socket.io'),
     static = require('node-static'),
-    levelup = require('levelup');
+    levelup = require('levelup'),
+    alphabetize = require('./alphabetize');
 
 // Configuration
 var database = './dictionary.level.db';
@@ -32,9 +33,9 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('letters', function (letters) {
         used = [];
-        combinations(letters, function(result) {
-            db.get(result, function(err) {
-                if (!err) {
+        combinations(alphabetize(letters), function(result) {
+            db.get(result, function(err, value) {
+               if (!err && value == 1) {
                     socket.emit('result', result);
                 }
             })
@@ -45,12 +46,14 @@ io.sockets.on('connection', function (socket) {
 // function to run all combinations, then check the permutations of each
 function combinations(letters, callback) {
     var fn = function(active, rest) {
-        if (!active && !rest)
+        if (active.length > 9 || (!active && !rest))
             return;
         if (!rest) {
-            if (active.length > 1) {
-                permutations(active, callback);
-            }
+            db.get(active, function(err, value) {
+                if (!err && value == 0) {
+                    setImmediate(permutations, active, callback);
+                }
+            });
         } else {
             fn(active + rest[0], rest.slice(1));
             fn(active, rest.slice(1));
