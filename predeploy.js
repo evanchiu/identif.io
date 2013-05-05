@@ -25,8 +25,16 @@ function addkey(key, value) {
 // Function to add word and its alphabetized version to the database
 function addword(word) {
     if (word.length > 1 || word == 'i' || word == 'a') {
-        addkey(word, 1);
-        addkey(alphabetize(word), 0);
+        var a = alphabetize(word);
+        db.get(a, function(err, value) {
+            if (err && err.name == "NotFoundError") {
+                addkey(a, word);
+            } else if (err) {
+                console.log('Database error:', err);
+            } else {
+                addkey(a, value + ':' + word);
+            }
+        })
     }
 }
 

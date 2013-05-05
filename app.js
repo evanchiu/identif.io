@@ -34,47 +34,40 @@ io.sockets.on('connection', function (socket) {
     socket.on('letters', function (letters) {
         used = [];
         combinations(alphabetize(letters), function(result) {
-            db.get(result, function(err, value) {
-               if (!err && value == 1) {
-                    socket.emit('result', result);
-                }
-            })
-        })
+            if (used.indexOf(result) == -1) {
+                used.push(result);
+                socket.emit('result', result);
+            }
+        });
     });
 });
 
-// function to run all combinations, then check the permutations of each
+// function to run all combinations
 function combinations(letters, callback) {
     var fn = function(active, rest) {
+        // If there's no letters, or more than 9, return
         if (active.length > 9 || (!active && !rest))
             return;
+
+        // If rest is empty, this is a final combination
         if (!rest) {
+
+            // If the word exists in the dictionary, return it
             db.get(active, function(err, value) {
-                if (!err && value == 0) {
-                    setImmediate(permutations, active, callback);
+                if (!err) {
+                    if (value.indexOf(':') == -1) {
+                        setImmediate(callback, value);
+                    } else {
+                        var words = value.split(':');
+                        for (var i = 0, len = words.length; i < len; i++) {
+                            setImmediate(callback, words[i]);
+                        }
+                    }
                 }
             });
         } else {
             fn(active + rest[0], rest.slice(1));
             fn(active, rest.slice(1));
-        }
-    }
-    fn("", letters);
-}
-
-// function to check all permutations, making a callback when an unused
-// permutation is found
-function permutations(letters, callback) {
-    var fn = function(active, rest) {
-        if (!rest) {
-            if (used.indexOf(active) == -1) {
-                used.push(active);
-                callback(active);
-            }
-        } else {
-            for (var i = 0; i < rest.length; i++) {
-                fn(active + rest[i], rest.substr(0, i) + rest.substr(i+1));
-            }
         }
     }
     fn("", letters);
