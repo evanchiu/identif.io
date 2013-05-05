@@ -4,13 +4,17 @@
   "version": "0.1.0",
   "author": "Evan Chiu <evan@evanchiu.com",
   "dependencies": {
-    "levelup": "*",
-    "node-static": "*",
-    "socket.io": "*",
-    "socket.io-client": "*"
+    "levelup": "0.8.x",
+    "node-static": "0.6.x",
+    "socket.io": "0.9.x",
+    "socket.io-client": "0.9.x"
   },
   "scripts": {
     "start": "node app.js",
     "predeploy": "node predeploy.js"
-  }
+  },
+  "engines": {
+    "node": "0.8.x"
+  },
+  "subdomain": "identifio"
 }
