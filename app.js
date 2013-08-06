@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // identif.io
 // app.js - the main node.js application
 
@@ -11,6 +12,7 @@ var fs = require('fs'),
 
 // Configuration
 var database = './dictionary.level.db';
+var port = 7000;
 
 // Database and list of words that have been used
 var db = levelup(database);
@@ -18,7 +20,8 @@ var used = [];
 
 // File Server
 var app = require('http').createServer(handler);
-app.listen(8000);
+app.listen(port);
+console.log("Listening on port " + port);
 
 var file = new static.Server(path.join(__dirname, 'public'));
 
